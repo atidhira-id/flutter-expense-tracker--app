@@ -25,17 +25,6 @@ class ExpensesList extends StatelessWidget {
                   key: Key(expensesList[index].id),
                   onDismissed: (direction) {
                     onRemoveExpense(expensesList[index]);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Expense deleted"),
-                            TextButton(onPressed: () {}, child: Text('Undo')),
-                          ],
-                        ),
-                      ),
-                    );
                   },
                   background: Container(
                     decoration: BoxDecoration(
