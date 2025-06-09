@@ -29,9 +29,8 @@ class _NewExpenseState extends State<NewExpense> {
       firstDate: firstDate,
       lastDate: now,
     );
-
     setState(() {
-      _selectedDate = pickedDate;
+      _selectedDate = pickedDate ?? now;
     });
   }
 
