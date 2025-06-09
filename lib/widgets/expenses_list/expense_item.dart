@@ -10,14 +10,8 @@ class ExpenseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      margin: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: const Color.fromARGB(255, 203, 203, 203),
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
+      margin: Theme.of(context).cardTheme.margin,
+      shape: Theme.of(context).cardTheme.shape,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
