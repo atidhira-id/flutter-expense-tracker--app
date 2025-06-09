@@ -26,11 +26,9 @@ class ExpensesList extends StatelessWidget {
                   onDismissed: (direction) {
                     onRemoveExpense(expensesList[index]);
                   },
-                  background: Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 234, 114, 105),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                  background: Card(
+                    color: Theme.of(context).colorScheme.error.withAlpha(150),
+                    shape: Theme.of(context).cardTheme.shape,
                   ),
                   child: ExpenseItem(expensesList[index]),
                 ),
