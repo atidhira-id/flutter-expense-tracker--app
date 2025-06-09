@@ -79,91 +79,103 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _titleController,
-              maxLength: 50,
-              decoration: InputDecoration(labelText: 'Expense Title'),
-              validator: (value) => _titleValidator(value),
-            ),
-            Row(
+      padding: EdgeInsets.fromLTRB(24, 48, 24, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Add New Expense",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
+          Form(
+            key: _formKey,
+            child: Column(
               children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixText: '\$',
-                      labelText: 'Amount',
-                    ),
-                    validator: (value) => _amountValidator(value),
-                  ),
+                TextFormField(
+                  controller: _titleController,
+                  maxLength: 50,
+                  decoration: InputDecoration(labelText: 'Expense Title'),
+                  validator: (value) => _titleValidator(value),
                 ),
-                SizedBox(width: 12),
                 Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'No date selected'
-                          : DateFormat('dd MMMM yyyy').format(_selectedDate!),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          prefixText: '\$',
+                          labelText: 'Amount',
+                        ),
+                        validator: (value) => _amountValidator(value),
+                      ),
                     ),
-                    IconButton(
-                      onPressed: _showDatePicker,
-                      icon: Icon(Icons.calendar_month),
+                    SizedBox(width: 12),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          _selectedDate == null
+                              ? 'No date selected'
+                              : DateFormat(
+                                'dd MMMM yyyy',
+                              ).format(_selectedDate!),
+                        ),
+                        IconButton(
+                          onPressed: _showDatePicker,
+                          icon: Icon(Icons.calendar_month),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DropdownButton(
-                  value: _selectedCategory,
-                  items:
-                      ExpenseCategoty.values
-                          .map(
-                            (category) => DropdownMenuItem(
-                              value: category,
-                              child: Text(category.name.toUpperCase()),
-                            ),
-                          )
-                          .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == null) return;
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton(
+                      value: _selectedCategory,
+                      items:
+                          ExpenseCategoty.values
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category.name.toUpperCase()),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value == null) return;
 
-                      _selectedCategory = value;
-                    });
-                  },
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                          _selectedCategory = value;
+                        });
                       },
-                      child: const Text("Cancel"),
                     ),
-                    ElevatedButton(
-                      onPressed: _submitExpanseData,
-                      child: const Text('Save Expense'),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: _submitExpanseData,
+                          child: const Text('Save Expense'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
