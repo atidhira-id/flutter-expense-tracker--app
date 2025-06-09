@@ -21,6 +21,10 @@ void main() {
         cardTheme: CardThemeData().copyWith(
           color: kColorScheme.secondaryContainer,
           margin: EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: kColorScheme.secondaryContainer, width: 1),
+            borderRadius: BorderRadius.circular(4),
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
