@@ -1,4 +1,5 @@
 import 'package:expense_tracker/models/expense.dart';
+import 'package:expense_tracker/widgets/barchart.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -72,25 +73,47 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expense Tracker App'),
+        title: const Text('Expense'),
         actions: [
           IconButton(onPressed: _openAddExpenseModal, icon: Icon(Icons.add)),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Text('chart'),
-            Expanded(
-              child: ExpensesList(
-                expensesList: _registeredExpenses,
-                onRemoveExpense: (expense) => removeExpense(expense),
-              ),
-            ),
-          ],
-        ),
+        child:
+            _registeredExpenses.isEmpty
+                ? Center(
+                  child: Text(
+                    "No Expense",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                )
+                : width < 600
+                ? Column(
+                  children: [
+                    Barchart(data: _registeredExpenses),
+                    Expanded(
+                      child: ExpensesList(
+                        expensesList: _registeredExpenses,
+                        onRemoveExpense: (expense) => removeExpense(expense),
+                      ),
+                    ),
+                  ],
+                )
+                : Row(
+                  children: [
+                    Expanded(child: Barchart(data: _registeredExpenses)),
+                    Expanded(
+                      child: ExpensesList(
+                        expensesList: _registeredExpenses,
+                        onRemoveExpense: (expense) => removeExpense(expense),
+                      ),
+                    ),
+                  ],
+                ),
       ),
     );
   }
