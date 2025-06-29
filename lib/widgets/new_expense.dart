@@ -77,105 +77,147 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(24, 48, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
+    Widget titleTextField() {
+      return TextFormField(
+        controller: _titleController,
+        maxLength: 50,
+        decoration: InputDecoration(labelText: 'Expense Title'),
+        validator: (value) => _titleValidator(value),
+      );
+    }
+
+    Widget amountTextField() {
+      return TextFormField(
+        controller: _amountController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(prefixText: '\$', labelText: 'Amount'),
+        validator: (value) => _amountValidator(value),
+      );
+    }
+
+    Widget datePicker() {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            "Add New Expense",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            _selectedDate == null
+                ? 'No date selected'
+                : DateFormat('dd MMMM yyyy').format(_selectedDate!),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
-          SizedBox(height: 16),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _titleController,
-                  maxLength: 50,
-                  decoration: InputDecoration(labelText: 'Expense Title'),
-                  validator: (value) => _titleValidator(value),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _amountController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          prefixText: '\$',
-                          labelText: 'Amount',
-                        ),
-                        validator: (value) => _amountValidator(value),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          _selectedDate == null
-                              ? 'No date selected'
-                              : DateFormat(
-                                'dd MMMM yyyy',
-                              ).format(_selectedDate!),
-                        ),
-                        IconButton(
-                          onPressed: _showDatePicker,
-                          icon: Icon(Icons.calendar_month),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownButton(
-                      value: _selectedCategory,
-                      items:
-                          ExpenseCategoty.values
-                              .map(
-                                (category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(category.name.toUpperCase()),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          if (value == null) return;
+          IconButton(
+            onPressed: _showDatePicker,
+            icon: Icon(Icons.calendar_month),
+          ),
+        ],
+      );
+    }
 
-                          _selectedCategory = value;
-                        });
-                      },
+    Widget categoriesDropdown() {
+      return DropdownButton(
+        value: _selectedCategory,
+        items:
+            ExpenseCategoty.values
+                .map(
+                  (category) => DropdownMenuItem(
+                    value: category,
+                    child: Text(
+                      category.name.toUpperCase(),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel"),
+                  ),
+                )
+                .toList(),
+        onChanged: (value) {
+          setState(() {
+            if (value == null) return;
+            _selectedCategory = value;
+          });
+        },
+      );
+    }
+
+    Widget buttons() {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: _submitExpanseData,
+            child: const Text('Save'),
+          ),
+        ],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (ctx, constrain) {
+        final width = constrain.maxWidth;
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(24, 24, 24, keyboardSpace + 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Add New Expense",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(height: 16),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      if (width >= 600)
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: titleTextField()),
+                            SizedBox(width: 16),
+                            Expanded(child: amountTextField()),
+                          ],
+                        )
+                      else
+                        titleTextField(),
+                      if (width >= 600)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [categoriesDropdown(), datePicker()],
+                        )
+                      else
+                        Row(
+                          children: [
+                            Expanded(child: amountTextField()),
+                            SizedBox(width: 12),
+                            datePicker(),
+                          ],
                         ),
-                        ElevatedButton(
-                          onPressed: _submitExpanseData,
-                          child: const Text('Save Expense'),
-                        ),
-                      ],
-                    ),
-                  ],
+                      SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children:
+                            width >= 600
+                                ? [Spacer(), buttons()]
+                                : [categoriesDropdown(), buttons()],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
