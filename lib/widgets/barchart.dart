@@ -83,7 +83,8 @@ class Barchart extends StatelessWidget {
           elevation: 0,
           child: BarChart(
             BarChartData(
-              backgroundColor: Theme.of(context).colorScheme.surface,
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerLow,
               alignment: BarChartAlignment.spaceAround,
               maxY: _maxYAxis + 10,
               barTouchData: getBarTouchData(),
