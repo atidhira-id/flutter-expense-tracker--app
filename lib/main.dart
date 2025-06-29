@@ -22,6 +22,9 @@ ThemeData buildTheme(ColorScheme colorScheme) {
       margin: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: colorScheme.surface,
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.primaryContainer,
@@ -31,7 +34,7 @@ ThemeData buildTheme(ColorScheme colorScheme) {
       bodyLarge: GoogleFonts.poppins(color: colorScheme.onSurface),
       bodySmall: GoogleFonts.poppins(color: colorScheme.onSurface),
       titleLarge: GoogleFonts.poppins(
-        color: colorScheme.onPrimaryContainer,
+        color: colorScheme.onSurface,
         fontWeight: FontWeight.bold,
       ),
     ),
